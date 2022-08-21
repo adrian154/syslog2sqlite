@@ -3,7 +3,6 @@ const dgram = require("dgram");
 
 // start server
 const server = dgram.createSocket("udp6");
-server.bind(process.env.SYSLOG_PORT);
 
 server.on("error", console.error);
 
@@ -14,3 +13,6 @@ server.on("message", msg => {
     console.log(object);
 
 });
+
+server.on("listening", () => console.log("Listening on port " + process.env.SYSLOG_PORT));
+server.bind(process.env.SYSLOG_PORT);
