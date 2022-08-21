@@ -2,10 +2,10 @@ const Database = require("better-sqlite3");
 const dgram = require("dgram");
 
 // to maximize INSERTs/second, batch all INSERTs received within a given interval into a single transaction
-// this makes a *huge* difference!
-const TRANSACTION_INTERVAL = 5000;
+// in the event that our server suddenly receives a large amount of requests, this will prevent bottlenecking
+const TRANSACTION_INTERVAL = 1000;
 
-// make database
+// create table for requests
 const db = new Database("requests.db");
 db.exec(`CREATE TABLE IF NOT EXISTS requests (
     timestamp INTEGER NOT NULL,
@@ -14,12 +14,14 @@ db.exec(`CREATE TABLE IF NOT EXISTS requests (
     remoteAddr STRING NOT NULL,
     requestMethod STRING NOT NULL,
     requestUri STRING NOT NULL,
+    host STRING,
+    origin STRING NOT NULL,
     protocol STRING NOT NULL,
     referrer STRING NOT NULL,
     userAgent STRING NOT NULL
 )`);
 
-const insertStmt = db.prepare("INSERT INTO requests (timestamp, requestLen, status, remoteAddr, requestMethod, requestUri, protocol, referrer, userAgent) VALUES (:timestamp, :requestLen, :status, :remoteAddr, :requestMethod, :requestUri, :protocol, :referrer, :userAgent)");
+const insertStmt = db.prepare("INSERT INTO requests (timestamp, requestLen, status, remoteAddr, requestMethod, requestUri, host, protocol, referrer, userAgent) VALUES (:timestamp, :requestLen, :status, :remoteAddr, :requestMethod, :requestUri, :host, :protocol, :referrer, :userAgent)");
 
 // start server
 const server = dgram.createSocket("udp6");
@@ -27,7 +29,7 @@ const server = dgram.createSocket("udp6");
 server.on("error", console.error);
 server.on("listening", () => console.log("Listening on port " + process.env.SYSLOG_PORT));
 
-// periodically commit transaction
+// periodically commit requests to DB
 let inTransaction = false;
 setInterval(() => {
     if(inTransaction) {
