@@ -31,6 +31,7 @@ server.on("listening", () => console.log("Listening on port " + process.env.SYSL
 let inTransaction = false;
 setInterval(() => {
     if(inTransaction) {
+        console.log("committing...");
         db.prepare("COMMIT").run();
     }
 }, TRANSACTION_INTERVAL);
@@ -41,6 +42,7 @@ server.on("message", msg => {
     const object = JSON.parse(str.slice(str.indexOf('{')));
 
     if(!inTransaction) {
+        console.log("beginning...");
         db.prepare("BEGIN").run();
         inTransaction = true;
     }
