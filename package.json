@@ -1,0 +1,26 @@
+{
+  "name": "syslog2sqlite",
+  "version": "1.0.0",
+  "description": "Extemely hacky daemon that stores syslog messages from NGINX to a database",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adrian154/syslog2sqlite.git"
+  },
+  "keywords": [
+    "syslog",
+    "nginx"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/adrian154/syslog2sqlite/issues"
+  },
+  "homepage": "https://github.com/adrian154/syslog2sqlite#readme",
+  "dependencies": {
+    "better-sqlite3": "^7.6.2"
+  }
+}
