@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/adrian154/syslog2sqlite/issues"
   },
-  "homepage": "https://github.com/adrian154/syslog2sqlite#readme"
+  "homepage": "https://github.com/adrian154/syslog2sqlite#readme",
+  "dependencies": {
+    "better-sqlite3": "^7.6.2"
+  }
 }
