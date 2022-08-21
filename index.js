@@ -7,7 +7,7 @@ const TRANSACTION_INTERVAL = 5000;
 
 // make database
 const db = new Database("requests.db");
-db.exec(`CREATE TABLE requests (
+db.exec(`CREATE TABLE IF NOT EXISTS requests (
     timestamp INTEGER NOT NULL,
     requestLen INTEGER NOT NULL,
     status INTEGER NOT NULL,
